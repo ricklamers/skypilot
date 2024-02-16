@@ -163,6 +163,17 @@ def bootstrap_instances(
     # Google Compute Platform organizes all the resources, such as storage
     # buckets, users, and instances under projects. This is different from
     # aws ec2 where everything is global.
+    
+    # Enable secure boot by default
+    shielded_vm_config = {
+        "enableSecureBoot": True,
+        # "enableVtpm": True,
+        # "enableIntegrityMonitoring": True,
+    }
+    if "shieldedInstanceConfig" in config.node_config:
+        config.node_config["shieldedInstanceConfig"].update(shielded_vm_config)
+    else:
+        config.node_config["shieldedInstanceConfig"] = shielded_vm_config
 
     _configure_project(config.provider_config, crm)
     iam_role = _configure_iam_role(config, crm, iam)
